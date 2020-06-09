@@ -39,7 +39,7 @@ const ProductCreate = (props) => {
     };
     // const productInfo2 = [name, ean, type, weight, color, active];
     localStorage.setItem(r, JSON.stringify(productInfo));
-    alert("Product: " + name + " created!");
+    alert('Product: ' + name + ' created!');
   }
 
   return (
@@ -97,9 +97,9 @@ const styles = {
     color: 'gray',
     fontWeight: '600',
   },
-  submitButton:{
+  submitButton: {
     cursor: 'pointer',
-  }
+  },
 };
 
 export default ProductCreate;
