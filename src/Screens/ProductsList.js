@@ -36,13 +36,13 @@ const ProductList = (props) => {
             <input value={value.price} />
             <input value={value.quantity} />
             <input checked={value.active} type="checkbox" />
-            <Link to={'/products/' + key}>VIEW</Link>
-            <Link to={'/products/' + key + '/edit'}>EDIT</Link>
-            <button onClick={() => props.deleteHandler(key)}>DELETE</button>
+            <Link style={style.viewButton} to={'/products/' + key}>VIEW</Link>
+            <Link style={style.editButton} to={'/products/' + key + '/edit'}>EDIT</Link>
+            <button style={style.deleteButton} onClick={() => props.deleteHandler(key)}>DELETE</button>
           </div>
         );
       })}
-      <Link to="/products/create">Add new product</Link>
+      <Link style={style.addProductButton} to="/products/create">Add new product</Link>
     </div>
   );
 };
@@ -63,7 +63,7 @@ const TableHeader = (props) => {
 };
 
 const TableField = (props) => {
-  return <p>{props.text}</p>;
+  return <p style={style.tableHeaderName}>{props.text}</p>;
 };
 
 const style = {
@@ -75,18 +75,22 @@ const style = {
     margin: 'auto',
     padding: '10px',
     color: 'red',
-    fontSize: '18px',
+    fontSize: '12px',
     fontWeight: '500',
   },
   gridTableHeader: {
     display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10%',
+    gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 20px',
+    alignItems: 'center',
+    fontSize: '12px',
   },
   gridItemsContainer: {
     display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10% 10% 5% 5%',
-    backgroundColor: '#E3FB75'
-
+    gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
+    backgroundColor: '#E3FB75',
+    alignItems: 'center',
+    borderTop: '1px #F3ECD5',
+    borderBottom: '1px #F3ECD5',
   },
   field: {
     margin: '10px',
@@ -95,9 +99,52 @@ const style = {
   highlight: {
     fontWeight: 'bold',
     display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10% 10% 5% 5%',
+    gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
     backgroundColor: '#708510',
+    alignItems: 'center',
+    borderTop: '1px #F3ECD5',
+    borderBottom: '1px #F3ECD5',
   },
+  tableHeaderName: {
+    color: '#866C1E',
+    fontWeight: 'Bold',
+  },
+  addProductButton: {
+    backgroundColor: '#BADC01',
+    color: '#F5FADA',
+    border: '1px #A5C207',
+    borderRadius: '5px',
+    padding: '10px',
+    textDecoration: 'none',
+    position: 'absolute'
+  },
+  viewButton: {
+    backgroundColor: '#1196FE',
+    color: 'black',
+    border: '1px #033354',
+    borderRadius: '5px',
+    textDecoration: 'none',
+    textAlign: 'center',
+  },
+  editButton: {
+    backgroundColor: '#FADD21',
+    color: 'black',
+    border: '1px #033354',
+    borderRadius: '5px',
+    textDecoration: 'none',
+    textAlign: 'center',
+  },
+  deleteButton: {
+    backgroundColor: '#E1381A',
+    color: 'black',
+    border: '1px #033354',
+    borderRadius: '5px',
+    textDecoration: 'none',
+    textAlign: 'center',
+    pointer: 'cursors',
+  }
+
+
 };
 
 export default ProductsPreview;

@@ -29,6 +29,14 @@ const ProductEdit = (props) => {
     setProduct({ ...product, active: event.target.value });
   };
 
+  const handlePrice = (event) => {
+    setProduct({ ...product, price: event.target.value });
+  };
+
+  const handleQuantity = (event) => {
+    setProduct({ ...product, quantity: event.target.value });
+  };
+
   const handleSave = (event) => {
     const productInfo = {
       name: product.name,
@@ -36,6 +44,8 @@ const ProductEdit = (props) => {
       type: product.type,
       weight: product.weight,
       color: product.color,
+      quantity: product.quantity,
+      price: product.price,
       active: product.active,
     };
     localStorage.setItem(id, JSON.stringify(productInfo));
@@ -72,6 +82,22 @@ const ProductEdit = (props) => {
             value={product.color}
             type="text"
             onChange={handleColor}
+          ></input>
+        </label>
+        <label style={styles.label}>
+          Price:{' '}
+          <input
+            value={product.price}
+            type="number"
+            onChange={handlePrice}
+          ></input>
+        </label>
+        <label style={styles.label}>
+          Quantity:{' '}
+          <input
+            value={product.quantity}
+            type="number"
+            onChange={handleQuantity}
           ></input>
         </label>
         <label style={styles.label}>

@@ -6,7 +6,9 @@ const ProductCreate = (props) => {
   const [type, setType] = useState('');
   const [weight, setWeight] = useState('');
   const [color, setColor] = useState('');
-  const [active, setActive] = useState('');
+  const [active, setActive] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   function handleName(event) {
     setName(event.target.value);
@@ -24,8 +26,15 @@ const ProductCreate = (props) => {
     setColor(event.target.value);
   }
   function handleActive(event) {
-    setActive(event.target.value);
+    setActive(!active);
   }
+  const handlePrice = (event) => {
+    setPrice(event.target.value);
+  };
+
+  const handleQuantity = (event) => {
+    setQuantity(event.target.value);
+  };
 
   function handleSave(event) {
     let r = Math.random().toString(36).substring(7);
@@ -35,9 +44,10 @@ const ProductCreate = (props) => {
       type: type,
       weight: weight,
       color: color,
+      price: price,
+      quantity: quantity,
       active: active,
     };
-    // const productInfo2 = [name, ean, type, weight, color, active];
     localStorage.setItem(r, JSON.stringify(productInfo));
     alert('Product: ' + name + ' created!');
   }
@@ -62,6 +72,14 @@ const ProductCreate = (props) => {
         <label style={styles.label}>
           Color:{' '}
           <input value={color} type="text" onChange={handleColor}></input>
+        </label>
+        <label style={styles.label}>
+          Price:{' '}
+          <input value={price} type="number" onChange={handlePrice}></input>
+        </label>
+        <label style={styles.label}>
+          Quantity:{' '}
+          <input value={quantity} type="number" onChange={handleQuantity}></input>
         </label>
         <label style={styles.label}>
           Active:{' '}
