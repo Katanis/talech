@@ -17,7 +17,6 @@ const ProductList = (props) => {
     <div style={style.container}>
       <TableHeader></TableHeader>
       {Object.entries(localStorage).map(([key, valueJSON]) => {
-        console.log(localStorage.getItem('name'));
         const value = JSON.parse(valueJSON);
         return (
           <div style={style.gridItemsContainer}>
@@ -70,7 +69,6 @@ const style = {
   gridTableHeader: {
     display: 'grid',
     gridTemplateColumns: '10% 10% 10% 10% 10% 10%',
-    // gridTemplateRows: 'auto auto auto',
   },
   gridItemsContainer: {
     display: 'grid',
