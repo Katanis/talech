@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 const ProductsPreview = (props) => {
   const [deleted, setDelete] = useState(false);
 
+  const priceHandler = (event) => {};
+
   function deleteHandler(key) {
     localStorage.removeItem(key);
     setDelete(!deleted);
-    alert("Product with id: " + key + " deleted!");
+    alert('Product with id: ' + key + ' deleted!');
   }
   return <ProductList deleteHandler={deleteHandler}></ProductList>;
 };
@@ -19,13 +21,21 @@ const ProductList = (props) => {
       {Object.entries(localStorage).map(([key, valueJSON]) => {
         const value = JSON.parse(valueJSON);
         return (
-          <div style={style.gridItemsContainer}>
+          <div
+            id={key}
+            key={key}
+            style={
+              value.quantity <= 0 ? style.highlight : style.gridItemsContainer
+            }
+          >
             <p>{value.name}</p>
             <p>{value.ean}</p>
             <p>{value.type}</p>
             <p>{value.weight}</p>
             <p>{value.color}</p>
-            <input checked={value.active} type="checkbox"></input>
+            <input value={value.price} />
+            <input value={value.quantity} />
+            <input checked={value.active} type="checkbox" />
             <Link to={'/products/' + key}>VIEW</Link>
             <Link to={'/products/' + key + '/edit'}>EDIT</Link>
             <button onClick={() => props.deleteHandler(key)}>DELETE</button>
@@ -45,6 +55,8 @@ const TableHeader = (props) => {
       <TableField style={style.field} text="Type"></TableField>
       <TableField style={style.field} text="Weight"></TableField>
       <TableField style={style.field} text="Color"></TableField>
+      <TableField style={style.field} text="Price"></TableField>
+      <TableField style={style.field} text="Quantity"></TableField>
       <TableField style={style.field} text="Active"></TableField>
     </div>
   );
@@ -68,15 +80,23 @@ const style = {
   },
   gridTableHeader: {
     display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 10%',
+    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10%',
   },
   gridItemsContainer: {
     display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10% 10%',
+    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10% 10% 5% 5%',
+    backgroundColor: '#E3FB75'
+
   },
   field: {
     margin: '10px',
     padding: '5px',
+  },
+  highlight: {
+    fontWeight: 'bold',
+    display: 'grid',
+    gridTemplateColumns: '10% 10% 10% 10% 10% 10% 10% 10% 10% 5% 5%',
+    backgroundColor: '#708510',
   },
 };
 
