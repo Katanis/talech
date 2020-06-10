@@ -1,55 +1,134 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import './ProductList.css';
 
 const ProductsPreview = (props) => {
   const [deleted, setDelete] = useState(false);
+  const [products, setProducts] = useState({});
 
-  const priceHandler = (event) => {};
+  useEffect(() => {
+    let locProducts = localStorage;
+    // localStorage.clear()
+    setProducts(locProducts);
+  }, [deleted]);
+
+  function setNewQuantity(event, key) {
+    setProducts({ ...products, quantity: event.target.value });
+  }
+
+  function setNewPrice(event, key) {
+    // let temp = products;
+    // let stringToParse = JSON.parse(temp[key]);
+    // stringToParse.price = event.target.value;
+    // temp[key] = stringToParse;
+    // // temp[key].price = event.target.value;
+
+    // // alert(JSON.stringify(temp[key]));
+    // setProducts(temp);
+    alert(JSON.stringify(products));
+  }
+
+  function saveInlineEdits() {
+    alert('save clicked');
+    Object.entries(products).map(([key, value]) => {
+      const val = JSON.parse(value);
+      alert(JSON.stringify(val));
+      return localStorage.setItem(key, JSON.stringify(val));
+    });
+  }
 
   function deleteHandler(key) {
     localStorage.removeItem(key);
     setDelete(!deleted);
     alert('Product with id: ' + key + ' deleted!');
   }
-  return <ProductList deleteHandler={deleteHandler}></ProductList>;
+  return (
+    <ProductList
+      saveInlineEdits={saveInlineEdits}
+      setNewQuantity={setNewQuantity}
+      setNewPrice={setNewPrice}
+      products={products}
+      setProducts={setProducts}
+      deleteHandler={deleteHandler}
+    ></ProductList>
+  );
 };
 
 const ProductList = (props) => {
   return (
-    <div style={style.container}>
+    <table>
       <TableHeader></TableHeader>
-      {Object.entries(localStorage).map(([key, valueJSON]) => {
+      {Object.entries(props.products).map(([key, valueJSON]) => {
         const value = JSON.parse(valueJSON);
         return (
-          <div
+          <tr
             id={key}
             key={key}
             style={
               value.quantity <= 0 ? style.highlight : style.gridItemsContainer
             }
           >
-            <p>{value.name}</p>
-            <p>{value.ean}</p>
-            <p>{value.type}</p>
-            <p>{value.weight}</p>
-            <p>{value.color}</p>
-            <input value={value.price} />
-            <input value={value.quantity} />
-            <input checked={value.active} type="checkbox" />
-            <Link style={style.viewButton} to={'/products/' + key}>VIEW</Link>
-            <Link style={style.editButton} to={'/products/' + key + '/edit'}>EDIT</Link>
-            <button style={style.deleteButton} onClick={() => props.deleteHandler(key)}>DELETE</button>
-          </div>
+            <td>{value.name}</td>
+            <td>{value.ean}</td>
+            <td>{value.type}</td>
+            <td>{value.weight}</td>
+            <td>{value.color}</td>
+            <td>
+              <input
+                defaultValue={value.price}
+                onChange={(e) => props.setNewPrice(e, key)}
+              />
+            </td>
+            <td>
+              <input
+                defaultValue={value.quantity}
+                onChange={(e) => props.setNewQuantity(e, key)}
+              />
+            </td>
+            <td>
+              <input
+                defaultChecked={value.active}
+                onChange={value.active}
+                type="checkbox"
+              />
+            </td>
+            <td>
+              <Link style={style.viewButton} to={'/products/' + key}>
+                VIEW
+              </Link>
+            </td>
+            <td>
+              <Link style={style.editButton} to={'/products/' + key + '/edit'}>
+                EDIT
+              </Link>
+            </td>
+            <td>
+              <button
+                style={style.deleteButton}
+                onClick={() => props.deleteHandler(key)}
+              >
+                DELETE
+              </button>
+            </td>
+          </tr>
         );
       })}
-      <Link style={style.addProductButton} to="/products/create">Add new product</Link>
-    </div>
+      <Link style={style.addProductButton} to="/products/create">
+        Add new product
+      </Link>
+      <button
+        style={{ position: 'absolute', marginTop: '50px' }}
+        onClick={props.saveInlineEdits}
+      >
+        Save Inline Edits
+      </button>
+    </table>
   );
 };
 
 const TableHeader = (props) => {
   return (
-    <div style={style.gridTableHeader}>
+    <tr style={style.gridTableHeader}>
       <TableField style={style.field} text="Name"></TableField>
       <TableField style={style.field} text="EAN"></TableField>
       <TableField style={style.field} text="Type"></TableField>
@@ -58,16 +137,25 @@ const TableHeader = (props) => {
       <TableField style={style.field} text="Price"></TableField>
       <TableField style={style.field} text="Quantity"></TableField>
       <TableField style={style.field} text="Active"></TableField>
-    </div>
+      <TableField style={style.field}></TableField>
+      <TableField style={style.field}></TableField>
+      <TableField style={style.field}></TableField>
+    </tr>
   );
 };
 
 const TableField = (props) => {
-  return <p style={style.tableHeaderName}>{props.text}</p>;
+  return <th style={style.tableHeaderName}>{props.text}</th>;
 };
 
 const style = {
-  container: { margin: '20px', padding: '10px' },
+  // container: {
+  //   // margin: '20px',
+  //   padding: '10px',
+  //   border: '0px',
+  //   borderSpacing: 'unset',
+  //   width: '100%',
+  // },
   tavbleHeaderContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -79,18 +167,18 @@ const style = {
     fontWeight: '500',
   },
   gridTableHeader: {
-    display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 20px',
+    // display: 'grid',
+    // gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 20px',
     alignItems: 'center',
     fontSize: '12px',
   },
   gridItemsContainer: {
-    display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
-    backgroundColor: '#E3FB75',
+    // display: 'grid',
+    // gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
+    backgroundColor: '#fbcffc',
     alignItems: 'center',
-    borderTop: '1px #F3ECD5',
-    borderBottom: '1px #F3ECD5',
+    // borderTop: '1px #F3ECD5',
+    // borderBottom: '1px #F3ECD5',
   },
   field: {
     margin: '10px',
@@ -98,12 +186,12 @@ const style = {
   },
   highlight: {
     fontWeight: 'bold',
-    display: 'grid',
-    gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
-    backgroundColor: '#708510',
+    // display: 'grid',
+    // gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
+    backgroundColor: '#be79df',
     alignItems: 'center',
-    borderTop: '1px #F3ECD5',
-    borderBottom: '1px #F3ECD5',
+    // borderTop: '1px #F3ECD5',
+    // borderBottom: '1px #F3ECD5',
   },
   tableHeaderName: {
     color: '#866C1E',
@@ -116,7 +204,7 @@ const style = {
     borderRadius: '5px',
     padding: '10px',
     textDecoration: 'none',
-    position: 'absolute'
+    position: 'absolute',
   },
   viewButton: {
     backgroundColor: '#1196FE',
@@ -142,9 +230,7 @@ const style = {
     textDecoration: 'none',
     textAlign: 'center',
     pointer: 'cursors',
-  }
-
-
+  },
 };
 
 export default ProductsPreview;

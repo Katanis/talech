@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+.navItem{
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  border: 2px solid whitesmoke;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.navItem:hover{
+  color: black;
+  font-weight: 700;
+  border: 2px solid black;
+}
+
+.navigationContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #2bbbad;
+  height: 60px;
+}

@@ -63,9 +63,6 @@ const styles = {
     fontWeight: '600',
   },
   table: {
-    // display: 'flex',
-    // flexDirection: 'row',
-    // alignItems: 'center',
     border: '1px solid black',
     borderCollapse: 'collapse',
     padding: '20px',
