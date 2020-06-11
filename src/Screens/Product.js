@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
+import Tabs from '../Components/Tabs/Tabs';
 
 const ProductView = (props) => {
   const [product, setProduct] = useState({});
   let { id } = useParams();
+  var data = [
+    { id: '1', tabTitle: 'Product details', tabContent: 'Tab Content' },
+    { id: '2', tabTitle: 'Price history', tabContent: 'Tab Content 2' },
+    { id: '3', tabTitle: 'Quantity History', tabContent: 'Tab Content 3' },
+  ];
 
   useEffect(() => {
     let productFromLocalStorage = localStorage[id];
@@ -14,6 +20,7 @@ const ProductView = (props) => {
     <div style={styles.container}>
       <h1 style={styles.title}>Product {product.name} View Page</h1>
       <Table product={product} />
+      <Tabs data={data}/>
     </div>
   );
 };
