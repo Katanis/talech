@@ -17,23 +17,20 @@ const ProductsPreview = (props) => {
   }
 
   function setNewPrice(event, key) {
-    // let temp = products;
-    // let stringToParse = JSON.parse(temp[key]);
-    // stringToParse.price = event.target.value;
-    // temp[key] = stringToParse;
-    // // temp[key].price = event.target.value;
-
-    // // alert(JSON.stringify(temp[key]));
-    // setProducts(temp);
-    alert(JSON.stringify(products));
+    event.preventDefault();
+    // console.log(event.target.value);
+    // const value = event.target.value;
+    // setProducts((prevState) => {
+    //   prevState[key].price = value;
+    //   return { ...prevState };
+    // });
   }
 
   function saveInlineEdits() {
     alert('save clicked');
     Object.entries(products).map(([key, value]) => {
       const val = JSON.parse(value);
-      alert(JSON.stringify(val));
-      return localStorage.setItem(key, JSON.stringify(val));
+      localStorage.setItem(key, JSON.stringify(val));
     });
   }
 
@@ -44,6 +41,7 @@ const ProductsPreview = (props) => {
   }
   return (
     <ProductList
+      style={{ overflow: 'hidden' }}
       saveInlineEdits={saveInlineEdits}
       setNewQuantity={setNewQuantity}
       setNewPrice={setNewPrice}
@@ -56,73 +54,75 @@ const ProductsPreview = (props) => {
 
 const ProductList = (props) => {
   return (
-    <table>
-      <TableHeader></TableHeader>
-      {Object.entries(props.products).map(([key, valueJSON]) => {
-        const value = JSON.parse(valueJSON);
-        return (
-          <tr
-            id={key}
-            key={key}
-            style={
-              value.quantity <= 0 ? style.highlight : style.gridItemsContainer
-            }
-          >
-            <td>{value.name}</td>
-            <td>{value.ean}</td>
-            <td>{value.type}</td>
-            <td>{value.weight}</td>
-            <td>{value.color}</td>
-            <td>
-              <input
-                defaultValue={value.price}
-                onChange={(e) => props.setNewPrice(e, key)}
-              />
-            </td>
-            <td>
-              <input
-                defaultValue={value.quantity}
-                onChange={(e) => props.setNewQuantity(e, key)}
-              />
-            </td>
-            <td>
-              <input
-                defaultChecked={value.active}
-                onChange={value.active}
-                type="checkbox"
-              />
-            </td>
-            <td>
-              <Link style={style.viewButton} to={'/products/' + key}>
-                VIEW
-              </Link>
-            </td>
-            <td>
-              <Link style={style.editButton} to={'/products/' + key + '/edit'}>
-                EDIT
-              </Link>
-            </td>
-            <td>
-              <button
-                style={style.deleteButton}
-                onClick={() => props.deleteHandler(key)}
-              >
-                DELETE
-              </button>
-            </td>
-          </tr>
-        );
-      })}
-      <Link style={style.addProductButton} to="/products/create">
-        Add new product
-      </Link>
-      <button
-        style={{ position: 'absolute', marginTop: '50px' }}
-        onClick={props.saveInlineEdits}
-      >
-        Save Inline Edits
-      </button>
-    </table>
+    <div className="ScrollableContent">
+      <table>
+        <TableHeader></TableHeader>
+        {Object.entries(props.products).map(([key, valueJSON]) => {
+          const value = JSON.parse(valueJSON);
+          return (
+            <tr
+              id={key}
+              key={key}
+              style={
+                value.quantity <= 0 ? style.highlight : style.gridItemsContainer
+              }
+            >
+              <td>{value.name}</td>
+              <td>{value.ean}</td>
+              <td>{value.type}</td>
+              <td>{value.weight}</td>
+              <td>{value.color}</td>
+              <td>
+                <input
+                  defaultValue={value.price}
+                  onChange={(e) => props.setNewPrice(e, key)}
+                />
+              </td>
+              <td>
+                <input
+                  defaultValue={value.quantity}
+                  onChange={(e) => props.setNewQuantity(e, key)}
+                />
+              </td>
+              <td>
+                <input
+                  defaultChecked={value.active}
+                  onChange={value.active}
+                  type="checkbox"
+                />
+              </td>
+              <td>
+                <Link style={style.viewButton} to={'/products/' + key}>
+                  VIEW
+                </Link>
+              </td>
+              <td>
+                <Link
+                  style={style.editButton}
+                  to={'/products/' + key + '/edit'}
+                >
+                  EDIT
+                </Link>
+              </td>
+              <td>
+                <button
+                  style={style.deleteButton}
+                  onClick={() => props.deleteHandler(key)}
+                >
+                  DELETE
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+        <button
+          style={{ position: 'absolute', marginTop: '50px' }}
+          onClick={props.saveInlineEdits}
+        >
+          Save Inline Edits
+        </button>
+      </table>
+    </div>
   );
 };
 
@@ -149,13 +149,6 @@ const TableField = (props) => {
 };
 
 const style = {
-  // container: {
-  //   // margin: '20px',
-  //   padding: '10px',
-  //   border: '0px',
-  //   borderSpacing: 'unset',
-  //   width: '100%',
-  // },
   tavbleHeaderContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -167,18 +160,12 @@ const style = {
     fontWeight: '500',
   },
   gridTableHeader: {
-    // display: 'grid',
-    // gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 20px',
     alignItems: 'center',
     fontSize: '12px',
   },
   gridItemsContainer: {
-    // display: 'grid',
-    // gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
     backgroundColor: '#fbcffc',
     alignItems: 'center',
-    // borderTop: '1px #F3ECD5',
-    // borderBottom: '1px #F3ECD5',
   },
   field: {
     margin: '10px',
@@ -186,50 +173,43 @@ const style = {
   },
   highlight: {
     fontWeight: 'bold',
-    // display: 'grid',
-    // gridTemplateColumns: '10% 10% 10% 10% 10% 5% 5% 40px 60px 60px 60px',
     backgroundColor: '#be79df',
     alignItems: 'center',
-    // borderTop: '1px #F3ECD5',
-    // borderBottom: '1px #F3ECD5',
   },
   tableHeaderName: {
     color: '#866C1E',
     fontWeight: 'Bold',
   },
-  addProductButton: {
-    backgroundColor: '#BADC01',
-    color: '#F5FADA',
-    border: '1px #A5C207',
-    borderRadius: '5px',
-    padding: '10px',
-    textDecoration: 'none',
-    position: 'absolute',
-  },
   viewButton: {
-    backgroundColor: '#1196FE',
+    backgroundColor: '#ccf0e1',
     color: 'black',
     border: '1px #033354',
     borderRadius: '5px',
     textDecoration: 'none',
     textAlign: 'center',
+    padding: '5px',
+    fontWeight: 'bold',
   },
   editButton: {
-    backgroundColor: '#FADD21',
+    backgroundColor: '#f8dc88',
     color: 'black',
     border: '1px #033354',
     borderRadius: '5px',
     textDecoration: 'none',
     textAlign: 'center',
+    padding: '5px',
+    fontWeight: 'bold',
   },
   deleteButton: {
-    backgroundColor: '#E1381A',
+    backgroundColor: '#f76a8c',
     color: 'black',
     border: '1px #033354',
     borderRadius: '5px',
     textDecoration: 'none',
     textAlign: 'center',
     pointer: 'cursors',
+    padding: '5px',
+    fontWeight: 'bold',
   },
 };
 

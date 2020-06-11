@@ -1,0 +1,43 @@
+.tabs {
+  width: 100vw;
+}
+
+.tabs-titles {
+  list-style: none;
+  padding: 0px;
+  margin: 0;
+}
+
+.tab-title {
+  background-color: #fff;
+  display: inline-block;
+  padding: 10px;
+  color: #c7c6c2;
+  cursor: pointer;
+  margin-left: 1px;
+}
+
+.tab-title--active {
+  background-color: #2bbbad;
+  color: white;
+  font-weight: 700;
+}
+
+.tab-content {
+  background-color: #2bbbad;
+  padding: 10px;
+  margin-left: 1px;
+  color: white;
+  font-weight: 500;
+}
+
+.link {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 20px;
+  margin: 30px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f55a42;
+  color: #fff;
+}
