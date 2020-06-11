@@ -30,7 +30,12 @@ const ProductEdit = (props) => {
   };
 
   const handlePrice = (event) => {
-    setProduct({ ...product, price: event.target.value });
+    event.preventDefault();
+
+    setProduct({
+      ...product,
+      price: event.target.value,
+    });
   };
 
   const handleQuantity = (event) => {
@@ -38,6 +43,41 @@ const ProductEdit = (props) => {
   };
 
   const handleSave = (event) => {
+    let tempPriceHistory = [];
+    const time = new Date();
+    if (product.priceHistory !== undefined && product.priceHistory.length > 0) {
+      tempPriceHistory = product.priceHistory;
+      if (tempPriceHistory.length < 5) {
+        tempPriceHistory.push([product.price, time]);
+      } else if (tempPriceHistory.length === 5) {
+        tempPriceHistory.push([product.price, time]);
+        tempPriceHistory.shift();
+      }
+    } else {
+      tempPriceHistory.push([product.price, time]);
+    }
+
+    let tempQuantityHistory = [];
+    if (
+      product.quantityHistory !== undefined &&
+      product.quantityHistory.length > 0
+    ) {
+      tempQuantityHistory = product.quantityHistory;
+      if (tempQuantityHistory.length < 5) {
+        tempQuantityHistory.push([product.quantity, time]);
+      } else if (tempQuantityHistory.length === 5) {
+        tempQuantityHistory.push([product.quantity, time]);
+        tempQuantityHistory.shift();
+      }
+    } else {
+      tempQuantityHistory.push([product.quantity, time]);
+    }
+    setProduct({
+      ...product,
+      priceHistory: tempPriceHistory,
+      quantityHistory: tempQuantityHistory,
+    });
+
     const productInfo = {
       name: product.name,
       ean: product.ean,
@@ -47,9 +87,10 @@ const ProductEdit = (props) => {
       quantity: product.quantity,
       price: product.price,
       active: product.active,
+      priceHistory: tempPriceHistory,
+      quantityHistory: tempQuantityHistory,
     };
     localStorage.setItem(id, JSON.stringify(productInfo));
-    alert('Product: ' + product.name + ' edited!');
   };
 
   return (

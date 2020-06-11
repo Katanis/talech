@@ -8,22 +8,24 @@ const ProductsPreview = (props) => {
 
   useEffect(() => {
     let locProducts = localStorage;
-    // localStorage.clear()
+    // localStorage.clear();
     setProducts(locProducts);
   }, [deleted]);
 
   function setNewQuantity(event, key) {
-    setProducts({ ...products, quantity: event.target.value });
+    event.preventDefault();
   }
 
   function setNewPrice(event, key) {
     event.preventDefault();
-    // console.log(event.target.value);
-    // const value = event.target.value;
-    // setProducts((prevState) => {
-    //   prevState[key].price = value;
-    //   return { ...prevState };
-    // });
+    let temp = localStorage.getItem(key);
+    
+    // let tempItem = JSON.parse(localStorage.getItem(key));
+    console.log(products);
+    setProducts({...products, price: event.target.value});
+    // console.log(tempItem);
+    // console.log('Current product: '+products[key]);
+
   }
 
   function saveInlineEdits() {
@@ -57,7 +59,7 @@ const ProductList = (props) => {
     <div className="ScrollableContent">
       <table>
         <TableHeader></TableHeader>
-        {Object.entries(props.products).map(([key, valueJSON]) => {
+        {Object.entries(localStorage).map(([key, valueJSON]) => {
           const value = JSON.parse(valueJSON);
           return (
             <tr

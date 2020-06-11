@@ -1,26 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import Tabs from '../Components/Tabs/Tabs';
+import Chart from '../Components/Chart/Chart';
 
 const ProductView = (props) => {
   const [product, setProduct] = useState({});
-  let { id } = useParams();
+  const [pricesHistory, setPriceHistory] = useState([]);
+  const [quantityHistory, setQuantityHistory] = useState([]);
+  const { id } = useParams();
+
+  const priceOptions = {
+    title: {
+      text: 'Price History',
+    },
+    series: [
+      {
+        data: pricesHistory,
+      },
+    ],
+  };
+
+  const quantityOptions = {
+    title: {
+      text: 'Quantity History',
+    },
+    series: [
+      {
+        data: quantityHistory,
+      },
+    ],
+  };
+
   var data = [
-    { id: '1', tabTitle: 'Product details', tabContent: 'Tab Content' },
-    { id: '2', tabTitle: 'Price history', tabContent: 'Tab Content 2' },
-    { id: '3', tabTitle: 'Quantity History', tabContent: 'Tab Content 3' },
+    {
+      id: '1',
+      tabTitle: 'Product details',
+      tabContent: 'Some details about product',
+    },
+    {
+      id: '2',
+      tabTitle: 'Price history',
+      tabContent: <Chart options={priceOptions} />,
+    },
+    {
+      id: '3',
+      tabTitle: 'Quantity History',
+      tabContent: <Chart options={quantityOptions} />,
+    },
   ];
 
   useEffect(() => {
-    let productFromLocalStorage = localStorage[id];
-    setProduct(JSON.parse(productFromLocalStorage));
+    let productFromLocalStorage = localStorage.getItem(id);
+    let tempProd = JSON.parse(productFromLocalStorage);
+    setProduct(tempProd);
+
+    let tempPriceArray = [];
+    let tempQuantityArray = [];
+    if (tempProd.priceHistory) {
+      Object.values(tempProd.priceHistory).map((value) => {
+        tempPriceArray.push([value?.[1],parseInt(value?.[0])]);
+      });
+      setPriceHistory(tempPriceArray);
+    }
+    if (tempProd.quantityHistory) {
+      Object.values(tempProd.quantityHistory).map((value) => {
+        tempQuantityArray.push([value?.[1],parseInt(value?.[0])]);
+      });
+      setQuantityHistory(tempQuantityArray);
+    }
   }, [id]);
 
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Product {product.name} View Page</h1>
+      {console.log(product.priceHistory?.[0]?.[0])}
       <Table product={product} />
-      <Tabs data={data}/>
+      <Tabs data={data} />
     </div>
   );
 };
@@ -37,8 +92,10 @@ const Table = (props) => {
 const TableValues = (props) => {
   return (
     <tr>
-      {Object.values(props.product).map((val) => {
-        return <td style={styles.tableItem}>{val}</td>;
+      {Object.values(props.product).map((val, index) => {
+        if (index < 8) {
+          return <td style={styles.tableItem}>{val}</td>;
+        }
       })}
     </tr>
   );
@@ -79,7 +136,7 @@ const styles = {
     border: '1px solid black',
     borderCollapse: 'collapse',
     padding: '10px',
-  }
+  },
 };
 
 export default ProductView;
